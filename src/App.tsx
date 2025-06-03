@@ -14,7 +14,6 @@ export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [filter, setFilter] = useState<Filter>('All');
-  const [filteredTodos, setFilteredTodos] = useState<Todo[]>([]);
   const activeTodosQuantity = todos.filter(todo => !todo.completed).length;
 
   const clearErrorMessage = () => {
@@ -33,22 +32,18 @@ export const App: React.FC = () => {
       });
   }, []);
 
-  useEffect(() => {
-    let newTodos = [...todos];
-
+  function filterTodos(): Todo[] {
     switch (filter) {
       case 'All':
-        break;
+        return todos;
       case 'Active':
-        newTodos = todos.filter(todo => !todo.completed);
-        break;
+        return todos.filter(todo => !todo.completed);
       case 'Completed':
-        newTodos = todos.filter(todo => todo.completed);
-        break;
+        return todos.filter(todo => todo.completed);
     }
+  }
 
-    setFilteredTodos(newTodos);
-  }, [todos, filter]);
+  const filteredTodos = filterTodos();
 
   const handleTodoChange = (id: number, completed: boolean) => {
     setTodos(currentTodos =>
